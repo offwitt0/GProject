@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tumor Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        
+        h1 {
+            margin-top: 0px;
+        }
+
+        form {
+            margin-bottom: 50px;
+        }
+
+    .custom-submit-button {
+        width: 13rem;
+        height: 3rem;
+        font-size: 20px;
+        padding: 10px 20px;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .custom-submit-button:hover {
+        --c: goldenrod;
+        color: var(--c);
+        font-size: 16px;
+        border: 0.3em solid var(--c);
+        border-radius: 0.5em;
+        width: 12em;
+        height: 3em;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-family: sans-serif;
+        letter-spacing: 0.1em;
+        text-align: center;
+        line-height: 3em;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        transition: 0.5s;
+        margin: 1em;
+    }
+
+    custom-submit-button span {
+        position: absolute;
+        width: 25%;
+        height: 100%;
+        background-color: var(--c);
+        transform: translateY(150%);
+        border-radius: 50%;
+        left: calc((var(--n) - 1) * 25%);
+        transition: 0.5s;
+        transition-delay: calc((var(--n) - 1) * 0.1s);
+        z-index: -1;
+    }
+
+custom-submit-button:hover {
+    color: white;
+}
+
+custom-submit-button:hover span {
+    transform: translateY(0) scale(2);
+}
+
+custom-submit-button span:nth-child(1) {
+    --n: 1;
+}
+custom-submit-button span:nth-child(2) {
+    --n: 2;
+}
+custom-submit-button span:nth-child(3) {
+    --n: 3;
+}
+custom-submit-button span:nth-child(4) {
+    --n: 4;
+}
+
+.custom-file-upload {
+    margin-bottom: 20px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+.custom-file-upload:hover {
+    background-color: #e0e0e0;
+}
+
+        p {
+            margin: 10px 0;
+        }
+        .image-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .image-container img {
+            display: block;
+            margin: 10px; /* Adjust margin for spacing between images */
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+        }
+        .image-caption {
+            margin-top: 5px;
+        }
+
+    </style>
+</head>
+
+<body>    
+    <div class="container">
+        <h1>Welcome to FCI_ZU BrainTech solutions</h1>
+        <h2>Upload MRI Image</h2>
+        <p>Please select an MRI image file :</p>
+
+        <form method="POST" enctype="multipart/form-data" action="{% url 'app' %}">
+            {% csrf_token %}
+            <label for="file-upload" class="custom-file-upload">
+                <i class="fas fa-cloud-upload-alt"></i> Choose File
+            </label>
+            <input id="file-upload" type="file" name="upload" accept=".jpg, .jpeg, .png, .jfif" style="display:none;" />
+            
+            <br>
+            <input type="submit" value="Submit" class="custom-submit-button" />
+        </form>
+
+        {% if pred %}
+        <p style="font-size: 25px; color: goldenrod; background-color: lightgrey; padding: 10px; border-radius: 10px; text-align: center;" 
+        onmouseover="this.style.fontWeight='bold'; this.style.backgroundColor='lightblue'" 
+        onmouseout="this.style.fontWeight='normal'; this.style.backgroundColor='lightgrey';">
+        {{ pred }}
+        </p>
+    
+        {% endif %}
+        {% if imgPath %}
+
+        <div class="image-container">
+            <div>
+                <p class="image-caption">Your Uploaded MRI:</p>
+                <img src="{{ imgPath }}" alt="Uploaded MRI"/>
+            </div>
+
+            <div>
+                <p class="image-caption">Detected Tumor Area:</p>
+                <img src="{{ heatmap_path }}" alt="Detected Tumor"/>
+            </div>
+
+            <div>
+                <p class="image-caption">Detected Tumor Area:</p>
+                <img src="{{ superimposed_path }}" alt="Detected Tumor"/>
+            </div>
+
+        </div>
+        {% endif %}
+        <br>
+    </div>
+
+</body>
+</html>
